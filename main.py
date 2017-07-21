@@ -1,5 +1,7 @@
+#!/usr/bin/env python
 import sys
 import png
+import argparse
 from wavefront import Wavefront
 
 class Buffer:
@@ -77,11 +79,17 @@ class Screen:
                     y = y + inc_y
                 self.buffer.set_pixel(y, x, r, g, b)
 
-if __name__ == "__main__":
-    buffer = Buffer(800, 600)
+def main():
+    parser = argparse.ArgumentParser(description="Process a wavefront object file")
+    parser.add_argument('--width', dest='width', type=int, default=800)
+    parser.add_argument('--height', dest='height', type=int, default=600)
+    parser.add_argument('--file', dest='filename', type=str, required=True)
+    args = parser.parse_args()
+
+    buffer = Buffer(args.width, args.height)
     screen = Screen(buffer)
 
-    obj = Wavefront("./obj/bunny.obj")
+    obj = Wavefront(args.filename)
 
     max_extent = max(obj.v_extent[0], obj.v_extent[1])
     scale = min(800 / max_extent, 600 / max_extent)
@@ -105,3 +113,6 @@ if __name__ == "__main__":
     print obj.v_extent
 
     buffer.write_to_png('output.png')
+
+if __name__ == "__main__":
+    main()
