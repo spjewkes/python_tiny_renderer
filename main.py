@@ -81,15 +81,17 @@ class Screen:
 
 def main():
     parser = argparse.ArgumentParser(description="Process a wavefront object file")
-    parser.add_argument('--width', dest='width', type=int, default=800)
-    parser.add_argument('--height', dest='height', type=int, default=600)
-    parser.add_argument('--file', dest='filename', type=str, required=True)
+    parser.add_argument('--width', help="Width of output image", dest='width', type=int, default=800)
+    parser.add_argument('--height', help="Height of output image", dest='height', type=int, default=600)
+    parser.add_argument('--out', help="Name of output image file", dest='output', type=str, default='output.png')
+    parser.add_argument('filename', help="Alias Wavefront file to read as input", type=str)
     args = parser.parse_args()
 
     buffer = Buffer(args.width, args.height)
     screen = Screen(buffer)
 
     obj = Wavefront(args.filename)
+    print("Processing {}".format(args.filename))
 
     max_extent = max(obj.v_extent[0], obj.v_extent[1])
     scale = min(800 / max_extent, 600 / max_extent)
@@ -112,7 +114,8 @@ def main():
     print obj.v_max
     print obj.v_extent
 
-    buffer.write_to_png('output.png')
+    buffer.write_to_png(args.output)
+    print("Written output to {}".format(args.output))
 
 if __name__ == "__main__":
     main()
