@@ -95,12 +95,12 @@ def main():
 
     max_extent = max(obj.v_extent[0], obj.v_extent[1])
     scale = min(800 / max_extent, 600 / max_extent)
-    print scale
+    print("Using scale: {}".format(scale))
 
     def conv_x(x):
-        return int(x * scale + 400.0)
+        return int(x * scale + (args.width / 2))
     def conv_y(y):
-        return int(y * scale + 0.0)
+        return int(y * scale + (args.height / 2))
 
     for f in obj.f:
         v1 = obj.v[f[0]]
@@ -110,9 +110,9 @@ def main():
         screen.draw_line(conv_x(v2[0]),conv_y(v2[1]), conv_x(v3[0]),conv_y(v3[1]), 255,255,255)
         screen.draw_line(conv_x(v3[0]),conv_y(v3[1]), conv_x(v1[0]),conv_y(v1[1]), 255,255,255)
 
-    print obj.v_min
-    print obj.v_max
-    print obj.v_extent
+    print("Minimum vector: {}".format(obj.v_min))
+    print("Maximum vector: {}".format(obj.v_max))
+    print("Calculated extent: {}".format(obj.v_extent))
 
     buffer.write_to_png(args.output)
     print("Written output to {}".format(args.output))
